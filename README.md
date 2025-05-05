@@ -1,31 +1,45 @@
 # 💪 CodeGains
 
-**CodeGains** es una aplicación web desarrollada en Node.js que permite gestionar usuarios y rutinas de entrenamiento. El proyecto se conecta a una base de datos PostgreSQL (remota o local) y utiliza HTML + TailwindCSS para una interfaz moderna y responsive.
+**CodeGains** és una aplicació web desenvolupada en Node.js que permet gestionar usuaris i rutines d'entrenament. El projecte es connecta a una base de dades PostgreSQL (remota o local) i utilitza HTML + TailwindCSS per oferir una interfície moderna i responsive.
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalitats
 
-- Visualización de usuarios registrados
-- Perfil detallado de cada usuario
-- Visualización de sus rutinas
-- Añadir nuevas rutinas desde el navegador
-- Interfaz responsive con Tailwind CSS
-- Contenedorización con Docker
+- Visualització d’usuaris registrats  
+- Perfil detallat de cada usuari  
+- Visualització de les seves rutines  
+- Afegir noves rutines des del navegador  
+- Interfície responsive amb Tailwind CSS  
+- Contenidoritzada amb Docker  
 
 ---
 
-## 🧱 Tecnologías usadas
+## 🧱 Tecnologies utilitzades
 
-- **Node.js + Express**
-- **PostgreSQL** (remoto en AlwaysData o local via Docker)
-- **HTML + JavaScript**
-- **Tailwind CSS**
+- **Node.js + Express**  
+- **PostgreSQL** (remota a AlwaysData o local via Docker)  
+- **HTML + JavaScript**  
+- **Tailwind CSS**  
 - **Docker + Docker Compose**
 
 ---
 
-## 📂 Estructura del proyecto
+## 🔧 Instruccions (Docker)
+
+### 1. Construir i arrencar l’aplicació
+
+```bash
+docker compose up --build
+```
+
+📍 Accedeix a: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 📂 Estructura del projecte
+
+```
 m08-node-js/
 ├── server.js
 ├── db.js
@@ -37,15 +51,20 @@ m08-node-js/
 │       ├── usuario.html
 │       ├── rutinas.html
 │       └── 404.html
+```
 
-🧪 MVP (Producte Viable Mínim)
-Visualització d'usuaris i rutines
+---
 
-Inserció de rutines associades
+## 🧪 MVP – Minimum Viable Product
 
-Interfície funcional amb enllaços dinàmics
+- Visualització d’usuaris i rutines  
+- Inserció de rutines associades a cada usuari  
+- Interfície funcional i accessible  
+- Entorn portable gràcies a Docker  
 
-Entorn portable amb Docker
+---
 
-Lokokom Team
+## 👨‍💻 Autors
+
+**Lokokom Team**  
 Martí Vilas · Mauricio Huamaní · Ashmed Barreiro · Argar Crespo
