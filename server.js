@@ -5,35 +5,79 @@ const db = require("./db");
 
 const PORT = process.env.PORT || 3000;
 
-// Home visual desde HTML
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Página de inicio (HTML)
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src", "views", "home.html"));
 });
 
-// Página de usuario
-app.get("/usuario", (req, res) => {
+// Página de usuario (HTML)
+app.get("/usuario.html", (req, res) => {
   res.sendFile(path.join(__dirname, "src", "views", "usuarios.html"));
 });
 
-// Página de rutinas
-app.get("/rutinas", (req, res) => {
+// Página de rutinas (HTML)
+app.get("/rutinas.html", (req, res) => {
   res.sendFile(path.join(__dirname, "src", "views", "rutinas.html"));
+});
+
+// API: obtener todos los usuarios
+app.get("/api/usuarios", async (req, res) => {
+  try {
+    const result = await db.query("SELECT * FROM usuarios");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error al obtener usuarios:", err);
+    res.status(500).json({ error: "Error al obtener usuarios" });
+  }
+});
+
+// API: obtener un usuario por ID
+app.get("/api/usuario/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+    if (result.rows.length === 0) return res.status(404).json({ error: "Usuario no encontrado" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error al obtener usuario:", err);
+    res.status(500).json({ error: "Error al obtener usuario" });
+  }
+});
+
+// API: obtener rutinas de un usuario
+app.get("/api/usuario/:id/rutinas", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("SELECT * FROM rutinas WHERE usuario_id = $1", [id]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error al obtener rutinas:", err);
+    res.status(500).json({ error: "Error al obtener rutinas" });
+  }
+});
+
+// API: añadir rutina a un usuario
+app.post("/api/usuario/:id/rutinas", async (req, res) => {
+  const { id } = req.params;
+  const { nombre, descripcion } = req.body;
+  try {
+    await db.query(
+      "INSERT INTO rutinas (usuario_id, nombre, descripcion) VALUES ($1, $2, $3)",
+      [id, nombre, descripcion]
+    );
+    res.status(201).send("Rutina añadida");
+  } catch (err) {
+    console.error("Error al añadir rutina:", err);
+    res.status(500).json({ error: "Error al añadir rutina" });
+  }
 });
 
 // Página 404
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "src", "views", "404.html"));
-});
-
-// Esta ruta responde a /api/usuarios con un JSON de todos los usuarios
-app.get("/api/usuarios", async (req, res) => {
-  try {
-    const result = await db.query("SELECT * FROM usuarios");
-    res.json(result.rows); // Devuelve los usuarios como JSON
-  } catch (err) {
-    console.error("Error al obtener usuarios:", err);
-    res.status(500).json({ error: "Error al obtener usuarios" });
-  }
 });
 
 app.listen(PORT, () => {
