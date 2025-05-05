@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Añadir rutina</title>
+</head>
+<body>
+  <h1>Nueva rutina</h1>
+  <form id="form">
+    <input type="text" id="nombre" placeholder="Nombre rutina" required /><br />
+    <textarea id="descripcion" placeholder="Descripción" required></textarea><br />
+    <button type="submit">Guardar</button>
+  </form>
+
+  <p><a id="volver" href="/">Volver</a></p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    document.getElementById("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        nombre: document.getElementById("nombre").value,
+        descripcion: document.getElementById("descripcion").value
+      };
+
+      await fetch(`/api/usuario/${id}/rutinas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      window.location.href = `/usuario.html?id=${id}`;
+    });
+
+    document.getElementById("volver").href = `/usuario.html?id=${id}`;
+  </script>
+</body>
+</html>

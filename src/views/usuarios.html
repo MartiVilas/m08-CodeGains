@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Usuario</title>
+</head>
+<body>
+  <h1 id="nombre"></h1>
+  <p>Correo: <span id="correo"></span></p>
+
+  <h2>Rutinas:</h2>
+  <ul id="rutinas"></ul>
+
+  <a id="link-rutinas" href="#">Añadir nueva rutina</a><br />
+  <a href="/">Volver al inicio</a>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    fetch(`/api/usuario/${id}`)
+      .then(res => res.json())
+      .then(user => {
+        document.getElementById("nombre").innerText = `Perfil de ${user.nombre}`;
+        document.getElementById("correo").innerText = user.correo;
+        document.getElementById("link-rutinas").href = `/rutinas.html?id=${id}`;
+      });
+
+    fetch(`/api/usuario/${id}/rutinas`)
+      .then(res => res.json())
+      .then(rutinas => {
+        const ul = document.getElementById("rutinas");
+        rutinas.forEach(r => {
+          const li = document.createElement("li");
+          li.innerText = `${r.nombre}: ${r.descripcion}`;
+          ul.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>
