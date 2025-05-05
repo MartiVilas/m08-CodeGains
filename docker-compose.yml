@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: codegains-app
+    ports:
+      - "3000:3000"
+    environment:
+      - PGHOST=postgresql-maury444.alwaysdata.net
+      - PGUSER=maury444_marti
+      - PGPASSWORD=marti123itb
+      - PGDATABASE=maury444_codegains
+      - PGPORT=5432
+      - PGSSL=true

@@ -2,39 +2,61 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Usuario</title>
+  <title>Perfil de usuario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1 id="nombre"></h1>
-  <p>Correo: <span id="correo"></span></p>
+<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col items-center px-4 py-8">
+  <div class="max-w-2xl w-full">
+    <h1 id="nombre" class="text-3xl font-bold text-green-400 text-center mb-2">Cargando...</h1>
+    <p class="text-center text-gray-300 mb-6">Correo: <span id="correo" class="text-white font-semibold"></span></p>
 
-  <h2>Rutinas:</h2>
-  <ul id="rutinas"></ul>
+    <h2 class="text-2xl font-semibold text-white mb-4">Rutinas registradas:</h2>
+    <ul id="rutinas" class="space-y-4 mb-8">
+      <!-- Rutinas aquí -->
+    </ul>
 
-  <a id="link-rutinas" href="#">Añadir nueva rutina</a><br />
-  <a href="/">Volver al inicio</a>
+    <div class="flex justify-between">
+      <a id="link-rutinas" href="#" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow transition">
+        ➕ Añadir nueva rutina
+      </a>
+      <a href="/" class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded shadow transition">
+        ⬅️ Volver al inicio
+      </a>
+    </div>
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
+    if (!id) {
+      document.body.innerHTML = "<h1 class='text-red-500 text-center'>❌ Error: falta el ID del usuario en la URL</h1>";
+      throw new Error("No hay ?id= en la URL");
+    }
+
+    document.getElementById("link-rutinas").href = `/rutinas.html?id=${id}`;
+
     fetch(`/api/usuario/${id}`)
       .then(res => res.json())
       .then(user => {
         document.getElementById("nombre").innerText = `Perfil de ${user.nombre}`;
-        document.getElementById("correo").innerText = user.correo;
-        document.getElementById("link-rutinas").href = `/rutinas.html?id=${id}`;
+        document.getElementById("correo").innerText = user.correo_electronico || user.correo || '—';
       });
 
     fetch(`/api/usuario/${id}/rutinas`)
       .then(res => res.json())
       .then(rutinas => {
         const ul = document.getElementById("rutinas");
-        rutinas.forEach(r => {
-          const li = document.createElement("li");
-          li.innerText = `${r.nombre}: ${r.descripcion}`;
-          ul.appendChild(li);
-        });
+        if (rutinas.length === 0) {
+          ul.innerHTML = `<li class="text-gray-400">Este usuario aún no tiene rutinas registradas.</li>`;
+        } else {
+          rutinas.forEach(r => {
+            const li = document.createElement("li");
+            li.className = "bg-gray-800 p-4 rounded shadow";
+            li.innerHTML = `<strong>${r.nombre}</strong><br><span class="text-gray-300">${r.descripcion}</span>`;
+            ul.appendChild(li);
+          });
+        }
       });
   </script>
 </body>

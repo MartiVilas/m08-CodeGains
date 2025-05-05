@@ -1,14 +1,14 @@
 const { Pool } = require("pg");
 
+const { Pool } = require("pg");
+
 const pool = new Pool({
-  user: "maury444_marti",
-  host: "postgresql-maury444.alwaysdata.net",
-  database: "maury444_codegains",
-  password: "marti123itb",
-  port: 5432,
-  ssl: {
-    rejectUnauthorized: false // Importante para conexiones externas
-  }
+  host: process.env.PGHOST,
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+  port: process.env.PGPORT,
+  ssl: process.env.PGSSL === "true"
 });
 
 pool.connect()

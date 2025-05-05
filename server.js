@@ -8,22 +8,22 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Página de inicio (HTML)
+// HOME: Página principal
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src", "views", "home.html"));
 });
 
-// Página de usuario (HTML)
+// USUARIO: Página del usuario
 app.get("/usuario.html", (req, res) => {
   res.sendFile(path.join(__dirname, "src", "views", "usuarios.html"));
 });
 
-// Página de rutinas (HTML)
+// RUTINAS: Página para añadir rutina
 app.get("/rutinas.html", (req, res) => {
   res.sendFile(path.join(__dirname, "src", "views", "rutinas.html"));
 });
 
-// API: obtener todos los usuarios
+// API: Todos los usuarios
 app.get("/api/usuarios", async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM usuarios");
@@ -34,12 +34,11 @@ app.get("/api/usuarios", async (req, res) => {
   }
 });
 
-// API: obtener un usuario por ID
+// API: Info de un usuario
 app.get("/api/usuario/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await db.query("SELECT * FROM usuarios WHERE id = $1", [id]);
-    if (result.rows.length === 0) return res.status(404).json({ error: "Usuario no encontrado" });
+    const result = await db.query("SELECT * FROM usuarios WHERE id_usuario = $1", [id]);
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Error al obtener usuario:", err);
@@ -47,7 +46,7 @@ app.get("/api/usuario/:id", async (req, res) => {
   }
 });
 
-// API: obtener rutinas de un usuario
+// API: Rutinas de un usuario
 app.get("/api/usuario/:id/rutinas", async (req, res) => {
   const { id } = req.params;
   try {
@@ -59,7 +58,7 @@ app.get("/api/usuario/:id/rutinas", async (req, res) => {
   }
 });
 
-// API: añadir rutina a un usuario
+// API: Añadir rutina
 app.post("/api/usuario/:id/rutinas", async (req, res) => {
   const { id } = req.params;
   const { nombre, descripcion } = req.body;
@@ -75,7 +74,7 @@ app.post("/api/usuario/:id/rutinas", async (req, res) => {
   }
 });
 
-// Página 404
+// 404
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "src", "views", "404.html"));
 });

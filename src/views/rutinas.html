@@ -3,38 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <title>Añadir rutina</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Nueva rutina</h1>
-  <form id="form">
-    <input type="text" id="nombre" placeholder="Nombre rutina" required /><br />
-    <textarea id="descripcion" placeholder="Descripción" required></textarea><br />
-    <button type="submit">Guardar</button>
-  </form>
+<body class="bg-gray-900 text-white font-sans min-h-screen flex items-center justify-center px-4 py-10">
+  <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-3xl font-bold text-green-400 mb-6 text-center">➕ Añadir nueva rutina</h1>
 
-  <p><a id="volver" href="/">Volver</a></p>
+    <form id="form" class="space-y-4">
+      <input
+        type="text"
+        id="nombre"
+        placeholder="Nombre de la rutina"
+        required
+        class="w-full px-4 py-2 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+      <textarea
+        id="descripcion"
+        placeholder="Descripción"
+        required
+        class="w-full px-4 py-2 h-32 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+      ></textarea>
+      <button
+        type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition"
+      >
+        Guardar rutina
+      </button>
+    </form>
+
+    <p class="mt-6 text-center">
+      <a id="volver" href="/" class="text-green-400 hover:underline">⬅️ Volver al perfil</a>
+    </p>
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
+    if (!id) {
+      document.body.innerHTML = "<h1 class='text-red-500 text-center'>❌ Error: falta el ID del usuario</h1>";
+      throw new Error("No hay ?id= en la URL");
+    }
+
+    document.getElementById("volver").href = `/usuario.html?id=${id}`;
+
     document.getElementById("form").addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const data = {
         nombre: document.getElementById("nombre").value,
         descripcion: document.getElementById("descripcion").value
       };
 
-      await fetch(`/api/usuario/${id}/rutinas`, {
+      const res = await fetch(`/api/usuario/${id}/rutinas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
 
-      window.location.href = `/usuario.html?id=${id}`;
+      if (res.ok) {
+        window.location.href = `/usuario.html?id=${id}`;
+      } else {
+        alert("Error al guardar la rutina");
+      }
     });
-
-    document.getElementById("volver").href = `/usuario.html?id=${id}`;
   </script>
 </body>
 </html>

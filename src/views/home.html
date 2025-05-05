@@ -2,12 +2,18 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Inicio</title>
+  <title>Inicio - CodeGains</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Bienvenido a CodeGains</h1>
-  <p>Lista de usuarios registrados:</p>
-  <ul id="lista-usuarios"></ul>
+<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col items-center justify-start px-4 py-8">
+  <div class="max-w-2xl w-full">
+    <h1 class="text-4xl font-bold mb-4 text-center text-green-400">Bienvenido a <span class="text-white">CodeGains</span> 💪</h1>
+    <p class="text-lg text-gray-300 mb-6 text-center">Usuarios registrados:</p>
+
+    <ul id="lista-usuarios" class="space-y-4">
+      <!-- Usuarios se insertan aquí -->
+    </ul>
+  </div>
 
   <script>
     fetch("/api/usuarios")
@@ -16,9 +22,17 @@
         const lista = document.getElementById("lista-usuarios");
         usuarios.forEach(user => {
           const li = document.createElement("li");
-          li.innerHTML = `<a href="/usuario.html?id=${user.id}">${user.nombre}</a>`;
+          li.innerHTML = `
+            <a href="/usuario.html?id=${user.id_usuario}" 
+               class="block px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg shadow-lg transition text-white text-lg font-semibold">
+              ${user.nombre}
+            </a>`;
           lista.appendChild(li);
         });
+      })
+      .catch(err => {
+        console.error("Error en fetch:", err);
+        document.body.innerHTML += "<p class='text-red-500'>Error al cargar usuarios</p>";
       });
   </script>
 </body>
