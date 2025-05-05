@@ -26,4 +26,26 @@
 ---
 
 ## 📂 Estructura del proyecto
+m08-node-js/
+├── server.js
+├── db.js
+├── Dockerfile
+├── docker-compose.yml
+├── src/
+│   └── views/
+│       ├── home.html
+│       ├── usuario.html
+│       ├── rutinas.html
+│       └── 404.html
 
+🧪 MVP (Producte Viable Mínim)
+Visualització d'usuaris i rutines
+
+Inserció de rutines associades
+
+Interfície funcional amb enllaços dinàmics
+
+Entorn portable amb Docker
+
+Lokokom Team
+Martí Vilas · Mauricio Huamaní · Ashmed Barreiro · Argar Crespo
